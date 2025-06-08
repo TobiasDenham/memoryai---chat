@@ -4,6 +4,42 @@ import Image from 'next/image'
 import Link from 'next/link'
 import Head from 'next/head'
 
+// Custom Button component
+function Button({ variant = 'default', size = 'default', className = '', children, ...props }) {
+  const baseClasses = 'inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 disabled:opacity-50 disabled:pointer-events-none'
+  
+  const variants = {
+    default: 'bg-gray-900 text-white hover:bg-gray-800',
+    ghost: 'bg-transparent hover:bg-gray-800',
+    outline: 'border border-gray-700 bg-transparent hover:bg-gray-800 text-gray-300'
+  }
+  
+  const sizes = {
+    default: 'h-10 px-4 py-2',
+    icon: 'h-10 w-10',
+    sm: 'h-8 px-3'
+  }
+  
+  return (
+    <button 
+      className={`${baseClasses} ${variants[variant]} ${sizes[size]} ${className}`}
+      {...props}
+    >
+      {children}
+    </button>
+  )
+}
+
+// Custom Input component
+function Input({ className = '', ...props }) {
+  return (
+    <input
+      className={`flex h-10 w-full rounded-md border border-gray-700 bg-gray-800/50 px-3 py-2 text-sm text-white placeholder:text-gray-400 focus:border-teal-500 focus:outline-none focus:ring-2 focus:ring-teal-500 disabled:cursor-not-allowed disabled:opacity-50 ${className}`}
+      {...props}
+    />
+  )
+}
+
 // Mock past conversations
 const pastConversations = [
   { id: "1", title: "Políticas de trabajo remoto", date: "Hoy" },
@@ -117,37 +153,38 @@ export default function ChatPage() {
               </div>
             </Link>
 
-            <button className="w-full mb-4 bg-gray-800 hover:bg-gray-700 text-white border border-gray-700 rounded-md px-4 py-2 flex items-center">
+            <Button className="w-full mb-4 bg-gray-800 hover:bg-gray-700 text-white border border-gray-700">
               <svg className="h-4 w-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
               </svg>
               Nuevo chat
-            </button>
+            </Button>
 
             <div className="mb-4">
-              <button className="w-full justify-start text-gray-400 hover:bg-gray-800 rounded-md px-4 py-2 flex items-center">
+              <Button variant="ghost" className="w-full justify-start text-gray-400 hover:bg-gray-800">
                 <svg className="h-4 w-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
                 </svg>
                 Buscar chats
-              </button>
+              </Button>
             </div>
 
             <div className="space-y-1">
               <h3 className="text-xs text-gray-500 uppercase tracking-wider mb-2">Conversaciones</h3>
               {pastConversations.map((conversation) => (
-                <button
+                <Button
                   key={conversation.id}
-                  className="w-full justify-start text-left text-gray-300 hover:bg-gray-800 h-auto py-2 px-3 rounded-md flex items-start"
+                  variant="ghost"
+                  className="w-full justify-start text-left text-gray-300 hover:bg-gray-800 h-auto py-2"
                 >
-                  <svg className="h-4 w-4 mr-2 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <svg className="h-4 w-4 mr-2 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
                   </svg>
                   <div className="flex-1 min-w-0">
                     <div className="truncate text-sm">{conversation.title}</div>
                     <div className="text-xs text-gray-500">{conversation.date}</div>
                   </div>
-                </button>
+                </Button>
               ))}
             </div>
           </div>
@@ -157,14 +194,16 @@ export default function ChatPage() {
         <div className="flex-1 flex flex-col">
           {/* Header */}
           <header className="border-b border-gray-800 py-3 px-4 flex items-center justify-between">
-            <button
+            <Button
+              variant="ghost"
+              size="icon"
               onClick={() => setSidebarOpen(!sidebarOpen)}
-              className="text-gray-400 hover:bg-gray-800 p-2 rounded-md"
+              className="text-gray-400 hover:bg-gray-800"
             >
               <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
               </svg>
-            </button>
+            </Button>
             <div className="text-center">
               <span className="font-medium">MemoryAI</span>
             </div>
@@ -205,47 +244,51 @@ export default function ChatPage() {
           <div className="border-t border-gray-800 p-4">
             <div className="max-w-4xl mx-auto">
               <form onSubmit={handleSubmit} className="flex items-center space-x-2">
-                <button
+                <Button
                   type="button"
-                  className="bg-transparent hover:bg-gray-700 text-gray-400 border border-gray-700 p-2 rounded-md"
+                  size="icon"
+                  variant="outline"
                 >
                   <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
                   </svg>
-                </button>
+                </Button>
                 <div className="relative flex-1">
-                  <input
+                  <Input
                     value={input}
                     onChange={(e) => setInput(e.target.value)}
                     placeholder="Pregunta lo que quieras"
-                    className="w-full py-3 pl-4 pr-4 bg-gray-800/50 border border-gray-700 rounded-xl text-white placeholder:text-gray-400 focus:border-teal-500 focus:outline-none"
+                    className="w-full py-3 pl-4 pr-4 bg-gray-800/50 border-gray-700 rounded-xl text-white placeholder:text-gray-400 focus:border-teal-500 focus:ring-teal-500"
                   />
                 </div>
-                <button
+                <Button
                   type="button"
-                  className="bg-transparent hover:bg-gray-700 text-gray-400 border border-gray-700 p-2 rounded-md"
+                  size="icon"
+                  variant="outline"
                 >
-                  <svg className="h-4 w-4" fill="currentColor" viewBox="0 0 20 20">
-                    <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                  <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 3l14 9-14 9V3z" />
                   </svg>
-                </button>
-                <button
+                </Button>
+                <Button
                   type="button"
-                  className="bg-transparent hover:bg-gray-700 text-gray-400 border border-gray-700 p-2 rounded-md"
+                  size="icon"
+                  variant="outline"
                 >
                   <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z" />
                   </svg>
-                </button>
-                <button
+                </Button>
+                <Button
                   type="submit"
-                  className="bg-transparent hover:bg-gray-700 text-gray-400 border border-gray-700 p-2 rounded-md disabled:opacity-50"
+                  size="icon"
+                  variant="outline"
                   disabled={!input.trim() || isLoading}
                 >
                   <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" />
                   </svg>
-                </button>
+                </Button>
               </form>
               <p className="text-xs text-gray-500 text-center mt-2">
                 MemoryAI puede cometer errores. Comprueba la información importante.

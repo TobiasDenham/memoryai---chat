@@ -1,14 +1,15 @@
 import { InputHTMLAttributes, forwardRef } from 'react'
 import { clsx } from 'clsx'
 
-interface InputProps extends InputHTMLAttributes<HTMLInputElement> {}
+export interface InputProps extends InputHTMLAttributes<HTMLInputElement> {}
 
-export const Input = forwardRef<HTMLInputElement, InputProps>(
-  ({ className, ...props }, ref) => {
+const Input = forwardRef<HTMLInputElement, InputProps>(
+  ({ className, type, ...props }, ref) => {
     return (
       <input
+        type={type}
         className={clsx(
-          'flex h-10 w-full rounded-md border border-gray-600 bg-gray-800 px-3 py-2 text-sm text-white placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-teal-500 disabled:cursor-not-allowed disabled:opacity-50',
+          "flex h-10 w-full rounded-md border border-gray-700 bg-gray-800/50 px-3 py-2 text-sm text-white placeholder:text-gray-400 focus:border-teal-500 focus:outline-none focus:ring-2 focus:ring-teal-500 disabled:cursor-not-allowed disabled:opacity-50",
           className
         )}
         ref={ref}
@@ -17,5 +18,6 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
     )
   }
 )
+Input.displayName = "Input"
 
-Input.displayName = 'Input'
+export { Input }
